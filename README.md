@@ -1,3 +1,6 @@
+![Release Status](https://github.com/sonnytricky/speedy/actions/workflows/release.yml/badge.svg)
+![Version](https://img.shields.io/github/v/release/speedy/cheatsheets?label=version&style=flat-square)
+
 # # Speedy-Gitea-Runner
 
 <p align="center">
