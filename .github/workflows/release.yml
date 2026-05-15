@@ -1,0 +1,109 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'runner-data/config.yaml'
+      - '.env.example'
+      - 'docker-compose.yml'
+      - 'Dockerfile'
+      - 'entrypoint.sh'
+
+permissions:
+  contents: write
+  actions: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout mit voller Historie + Tags
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Git konfigurieren
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      # Alle Tags holen
+      - name: Fetch tags
+        run: git fetch --tags --force
+
+      # Nächste Version bestimmen
+      - name: Determine next version
+        id: version
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+
+          VERSION=${LAST_TAG#v}
+
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+
+          MSG="$(git log -1 --pretty=%B)"
+
+          if echo "$MSG" | grep -iq "\[major\]"; then
+            MAJOR=$((MAJOR+1))
+            MINOR=0
+            PATCH=0
+          elif echo "$MSG" | grep -iq "\[minor\]"; then
+            MINOR=$((MINOR+1))
+            PATCH=0
+          else
+            PATCH=$((PATCH+1))
+          fi
+
+          NEXT_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+
+          echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+
+      # Release-Dateien vorbereiten
+      - name: Prepare release files
+        run: |
+          rm -rf release-temp
+          mkdir -p release-temp
+
+          # Projektdateien
+          cp -r runner-data release-temp/
+          cp .env.example release-temp/
+          cp docker-compose.yml release-temp/
+          cp Dockerfile release-temp/
+          cp entrypoint.sh release-temp/
+
+          # Zusätzliche Dateien
+          cp README.md release-temp/
+          cp LICENSE release-temp/
+
+      # Archiv erstellen
+      - name: Create archive
+        run: |
+          tar -czf release-v${{ env.NEXT_VERSION }}.tar.gz -C release-temp .
+
+      # Git Tag erstellen
+      - name: Create Git tag
+        run: |
+          git tag v${{ env.NEXT_VERSION }}
+          git push origin v${{ env.NEXT_VERSION }}
+
+      # GitHub Release erstellen
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ env.NEXT_VERSION }}
+          name: Release v${{ env.NEXT_VERSION }}
+          artifacts: release-v${{ env.NEXT_VERSION }}.tar.gz
+          generateReleaseNotes: true
+          draft: false
+          prerelease: false
