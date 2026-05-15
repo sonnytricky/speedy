@@ -1,5 +1,5 @@
-![Release Status](https://github.com/sonnytricky/speedy/actions/workflows/release.yml/badge.svg)
-![Version](https://img.shields.io/github/v/release/sonnytricky/speedy?label=version&style=flat-square)
+![Release Status](https://github.com/sonnytricky/Speedy-Gitea-Runner/actions/workflows/release.yml/badge.svg)
+![Version](https://img.shields.io/github/v/release/sonnytricky/Speedy-Gitea-Runner?label=version&style=flat-square)
 
 # # Speedy-Gitea-Runner
 
