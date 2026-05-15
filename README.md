@@ -71,3 +71,6 @@ Damit hast du:
 
 [Update-Anleitung](https://github.com/sonnytricky/speedy/blob/main/.docs/Update-Anleitung.md)
 
+## License
+
+This project is licensed under the GPL-3.0 License.
