@@ -1,0 +1,22 @@
+services:
+  gitea-runner:
+    build: .
+    image: gitea-runner-speedy:latest
+    container_name: speedy
+
+    user: "1001:1001"
+
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      CONFIG_FILE: /data/config.yaml
+      HOME: /data
+
+    volumes:
+      - ./runner-data:/data
+      - ./workspace:/workspace
+      - ./cache:/cache
+      - /var/run/docker.sock:/var/run/docker.sock
