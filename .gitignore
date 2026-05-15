@@ -1,0 +1,59 @@
+##############################################
+# Alles ignorieren                               # * bedeutet alles
+##############################################
+*
+
+##############################################
+# Verzeichnisse wieder erlauben
+##############################################
+!*/
+
+##############################################
+# Ordner ignorieren
+##############################################
+# /.Releases/
+# *.Releases/
+# !*/.Releases/
+# /.aLT/
+# *.aLT/
+# !*/.aLT/
+
+##############################################
+# Verzeichnisse wieder erlauben                  # !*/Unterordner/
+##############################################
+!*/.docs/
+!*/.github/ISSUE_TEMPLATE/
+!*/.github/workflows/
+!*/.images/
+!*/scripts/
+!*/runner-data/
+
+##############################################
+# Ausnahme: diese Dateien NICHT ignorieren
+##############################################
+# Beispiel:
+# - für Dateien in Unterordnern                  # !/Pfad/zur/Datein.txt
+# - für einzelne Dateien                         # !Datein.txt
+##############################################
+# .docs
+!/.docs/Update-Anleitung.md
+# TEMPLATES
+!/.github/ISSUE_TEMPLATE/bug_report.md
+!/.github/ISSUE_TEMPLATE/feature_request.md
+!/.github/ISSUE_TEMPLATE/idea.md
+!/.github/ISSUE_TEMPLATE/task.md
+!/.github/workflows/Test.yaml
+!/.github/PULL_REQUEST_TEMPLATE.md
+# .images
+!/.images/speedy.png
+!/runner-data/config.yaml
+!/scripts/gitea-runner-cleanup.sh
+!/.env.example
+!/.gitattributes
+!/.gitignore
+!/docker-compose.yml
+!/Dockerfile
+!/entrypoint.sh
+!/README.md
+
+
