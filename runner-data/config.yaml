@@ -1,0 +1,37 @@
+log:
+  level: info
+
+runner:
+  # Anzahl paralleler Jobs
+  capacity: 2
+
+  # Max. Laufzeit pro Job
+  timeout: 3h
+
+container:
+  # Standard Docker Netzwerk
+  network: bridge
+
+  # Keine privilegierten Container nötig
+  privileged: false
+
+  # Immer aktuelles Image ziehen
+  options: >-
+    --pull always
+    --label gitea.runner.job=true
+
+  # Erlaubte Mounts
+  valid_volumes:
+    - /cache
+    - /workspace
+
+  # Workspace nach jedem Job entfernen
+  force_clean_actions: true
+
+cache:
+  enabled: false
+  dir: /cache
+
+host:
+  # Temporäre Job-Verzeichnisse
+  workdir_parent: /workspace
